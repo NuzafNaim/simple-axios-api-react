@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios from 'axios';
+import React from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
+  async function getList() {
+    let result = await axios.get('https://crud.teamrabbil.com/api/v1/ReadProduct');
+    
+    if (result.status == 200) {
+      let list = result.data['data'];
+      list.forEach(item => {
+       let sai = document.getElementById('itemList').innerHTML += (
+          `
+          <tr>
+          <td>${item['ProductName']}</td>
+          <td>${item['ProductCode']}</td>
+          <td>${item['UnitPrice']}</td>
+          <td>${item['ProductName']}</td>
+          <td>${item['ProductName']}</td>
+          <td>${item['ProductName']}</td>
+          <td>${item['ProductName']}</td>
+          </tr>
+          `
+        )
+      });
+    } else {
+      console.log('Error');
+    }
+    
+  }
+  
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Product Code</th>
+            <th>Unit Price</th>
+            <th>Product Qty</th>
+            <th>Product Total Price</th>
+            <th>Delete</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody id="itemList">
 
-export default App
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default App;
